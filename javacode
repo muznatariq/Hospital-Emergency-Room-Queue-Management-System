@@ -1,0 +1,48 @@
+import java.util.PriorityQueue;
+import java.util.Comparator;
+
+// Patient class representing each person entering the hospital
+class Patient {
+    String name;
+    int emergencyLevel; // 5 is critical, 1 is minor
+
+    public Patient(String name, int emergencyLevel) {
+        this.name = name;
+        this.emergencyLevel = emergencyLevel;
+    }
+
+    @Override
+    public String toString() {
+        return "Patient: " + name + " [Emergency Level: " + emergencyLevel + "]";
+    }
+}
+
+public class HospitalQueueSystem {
+    public static void main(String[] args) {
+        // Creating a Priority Queue where the highest emergency level gets served first
+        PriorityQueue<Patient> emergencyRoom = new PriorityQueue<>(new Comparator<Patient>() {
+            @Override
+            public int compare(Patient p1, Patient p2) {
+                // Descending order: Higher emergencyLevel comes first
+                return Integer.compare(p2.emergencyLevel, p1.emergencyLevel);
+            }
+        });
+
+        System.out.println("--- Hospital ER Queue System Started ---\n");
+
+        // Patients arriving at the ER
+        emergencyRoom.add(new Patient("John (Normal Flu)", 1));
+        emergencyRoom.add(new Patient("Sara (Fracture)", 3));
+        emergencyRoom.add(new Patient("Ali (Heart Attack Symptoms)", 5)); // Arrives later but highest priority
+        emergencyRoom.add(new Patient("Zain (Deep Cut)", 4));
+
+        // Processing patients based on priority, NOT arrival time
+        System.out.println("Doctor is now treating patients in order of priority:\n");
+        while (!emergencyRoom.isEmpty()) {
+            Patient currentPatient = emergencyRoom.poll(); // Removes and returns the highest priority item
+            System.out.println("🚑 Now Treating -> " + currentPatient);
+        }
+
+        System.out.println("\n--- All patients treated. ER Queue is empty. ---");
+    }
+}
